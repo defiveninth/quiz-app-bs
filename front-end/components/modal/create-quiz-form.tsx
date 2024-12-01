@@ -14,16 +14,26 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog"
-import { PlusCircle } from 'lucide-react'
+import { Loader, PlusCircle } from 'lucide-react'
+import useCreateQuiz from '@/actions/quiz/create-quiz'
 
 export function CreateQuizForm() {
 	const [open, setOpen] = useState(false)
 	const [title, setTitle] = useState('')
 	const [description, setDescription] = useState('')
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const { isLoading, error, success, createQuiz } = useCreateQuiz()
+
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		console.log({ title, description })
+
+		if (!title) {
+			alert("Тақырыпты енгізу міндетті.")
+			return
+		}
+
+		await createQuiz(title, description)
+
 		setOpen(false)
 		setTitle('')
 		setDescription('')
@@ -33,21 +43,21 @@ export function CreateQuizForm() {
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger asChild>
 				<Button>
-					<PlusCircle className="mr-2 h-4 w-4" /> Create New Quiz
+					<PlusCircle className="mr-2 h-4 w-4" /> Жаңа сауалнама құру
 				</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle>Create New Quiz</DialogTitle>
+					<DialogTitle>Жаңа сауалнама құру</DialogTitle>
 					<DialogDescription>
-						Fill in the details for your new quiz. Click save when you're done.
+						Жаңа сауалнаманың мәліметтерін толтырыңыз. Аяқтаған соң "Сақтау" батырмасын басыңыз.
 					</DialogDescription>
 				</DialogHeader>
 				<form onSubmit={handleSubmit}>
 					<div className="grid gap-4 py-4">
 						<div className="flex flex-col gap-3">
 							<Label htmlFor="title" className="font-medium">
-								Title
+								Тақырып
 							</Label>
 							<Input
 								id="title"
@@ -59,23 +69,25 @@ export function CreateQuizForm() {
 						</div>
 						<div className="flex flex-col gap-3">
 							<Label htmlFor="description" className="font-medium">
-								Description
+								Сипаттама (Қосымша)
 							</Label>
 							<Textarea
 								id="description"
 								value={description}
 								onChange={(e) => setDescription(e.target.value)}
 								className="col-span-3"
-								required
 							/>
 						</div>
 					</div>
+					{error && <p className="text-red-500">{error}</p>}
+					{success && <p className="text-green-500">Сауалнама сәтті құрылды!</p>}
 					<DialogFooter>
-						<Button type="submit">Create Quiz</Button>
+						<Button type="submit" disabled={isLoading} className='w-32'>
+							{isLoading ? <Loader className='animate-spin' /> : <span>Құру</span>}
+						</Button>
 					</DialogFooter>
 				</form>
 			</DialogContent>
 		</Dialog>
 	)
 }
-
