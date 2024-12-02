@@ -4,14 +4,14 @@ import { Role } from './user.dto'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { JwtService } from '@nestjs/jwt'
 import { compare, genSalt, hash } from 'bcryptjs'
-import { MailService } from 'src/mailer/mailer.service'
+import { MailerService } from '@nestjs-modules/mailer'
 
 @Injectable()
 export class AuthService {
 	constructor(
 		private readonly prisma: PrismaService,
 		private jwtService: JwtService,
-		private readonly mailerService: MailService
+		private readonly mailerService: MailerService
 	) { }
 
 	async getInfo(accessToken: string) {
@@ -124,8 +124,7 @@ export class AuthService {
 	async createUser(email: string, role: Role) {
 		try {
 			const verifyToken = this.generateVerifyToken()
-			const verifyEmail = 'http://localhost:3000/auth/activate/' + verifyToken
-			console.log(verifyEmail)
+			const verifyEmail = 'https://myapi.kz/auth/activate/' + verifyToken
 
 			await this.prisma.user.create({
 				data: {
@@ -135,7 +134,7 @@ export class AuthService {
 				},
 			})
 
-			await this.mailerService.sendEmail(email, verifyEmail)
+			await this.sendEmail(email, verifyEmail)
 
 			return {
 				message: 'Пайдаланушы сәтті жасалды, тіркелгіңізді белсендіру үшін электрондық пошта мекенжайыңызды тексеріңіз',
@@ -150,6 +149,26 @@ export class AuthService {
 				}
 			}
 			return { message: 'Error: Something went wrong. Please try again.' }
+		}
+	}
+
+	async sendEmail(to: string, link: string) {
+		const htmlContent = `
+      <h1>Quiz-app: Біздің сервиске қош келдіңіз!</h1>
+      <p>Аккаунтты активация жасау сілтемесі</p>
+      <p><a href="${link}">${link}</a></p>
+    `
+		try {
+			await this.mailerService.sendMail({
+				to,
+				subject: 'Quiz-app: Біздің сервиске қош келдіңіз',
+				html: htmlContent,
+				from: 'abdurrauf.sakenov@narxoz.kz',
+			})
+			console.log('Email sent successfully')
+		} catch (error) {
+			console.error('Error sending email:', error)
+			throw error
 		}
 	}
 
