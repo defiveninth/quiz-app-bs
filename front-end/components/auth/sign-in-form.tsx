@@ -12,8 +12,8 @@ import { useRouter } from 'next/navigation'
 import { useToast } from '@/hooks/use-toast'
 
 export default function SignInForm() {
-	const [email, setEmail] = useState('abdurrauf.sakenov@narxoz.kz')
-	const [password, setPassword] = useState('Defiveninth')
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
 	const router = useRouter()
 	const { toast } = useToast()
 
