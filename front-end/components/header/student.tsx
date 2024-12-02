@@ -10,6 +10,7 @@ export default function Header() {
 	const [mobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 	const [token, setToken] = useState(null)
 	const [name, setName] = useState('')
+	const [role, setRole] = useState<'STUDENT' | 'TEACHER' | null>(null)
 	const router = useRouter()
 
 	const getToken = async () => {
@@ -34,10 +35,8 @@ export default function Header() {
 			})
 			if (!res.ok) throw new Error('Пайдаланушы ақпаратын алу сәтсіз аяқталды')
 			const data = await res.json()
+			setRole(data.role)
 
-			if (data.role === 'TEACHER') {
-				router.replace('/dashboard')
-			}
 			setName(`${data.firstname} ${data.surname}`)
 		} catch (error) {
 			console.error('Пайдаланушы ақпаратын алу қатесі:', error)
@@ -47,6 +46,12 @@ export default function Header() {
 	useEffect(() => {
 		getToken()
 	}, [])
+
+	useEffect(() => {
+		if (role === 'TEACHER') {
+			router.replace('/dashboard')
+		}
+	}, [role])
 
 	useEffect(() => {
 		if (token) {

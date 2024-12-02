@@ -46,12 +46,12 @@ const useActivateAccount = () => {
 			setSuccess(true)
 			fetch('/api/auth/set-token', {
 				method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ accessToken: data.accessToken }),
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ accessToken: data.accessToken }),
 			})
-			router.replace(data.role === 'TEACHER' ? '/dashboard' : '/')
+			router.replace('/dashboard')
 		} catch (err: any) {
 			setError(err.message)
 			console.error('activation error:', err)
