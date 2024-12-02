@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(cuid())
+  email       String    @unique
+  password    String?
+  role        Role
+  firstName   String?
+  surname     String?
+  avatarUrl   String?
+  token       String?
+  verifyToken String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  quizzes     Quiz[]    @relation("TeacherQuizzes")
+  attempts    Attempt[]
+
+  @@map("users")
+}
+
+model Question {
+  id            String          @id @default(cuid())
+  text          String
+  quizId        String
+  quiz          Quiz            @relation(fields: [quizId], references: [id], onDelete: Cascade) // Cascade delete on this side
+  options       Option[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  AttemptOption AttemptOption[]
+
+  @@map("questions")
+}
+
+model Quiz {
+  id          String     @id @default(cuid())
+  title       String
+  description String?
+  teacherId   String
+  teacher     User       @relation("TeacherQuizzes", fields: [teacherId], references: [id])
+  questions   Question[]
+  attempts    Attempt[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  Lesson      Lesson?
+
+  @@map("quizzes")
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  quizId      String   @unique
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("lessons")
+}
+
+model Option {
+  id            String          @id @default(cuid())
+  text          String
+  isCorrect     Boolean         @default(false)
+  questionId    String
+  question      Question        @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  AttemptOption AttemptOption[]
+
+  @@map("options")
+}
+
+model Attempt {
+  id             String          @id @default(cuid())
+  studentId      String
+  student        User            @relation(fields: [studentId], references: [id])
+  quizId         String
+  quiz           Quiz            @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  score          Int?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  attemptOptions AttemptOption[]
+
+  @@map("attempts")
+}
+
+model AttemptOption {
+  id         String   @id @default(cuid())
+  attemptId  String
+  attempt    Attempt  @relation(fields: [attemptId], references: [id])
+  optionId   String
+  option     Option   @relation(fields: [optionId], references: [id])
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+
+  @@map("attempt_options")
+}
+
+enum Role {
+  TEACHER
+  STUDENT
+}
