@@ -92,9 +92,9 @@ export default function SignInForm() {
 					{isLoading ? <Loader className='animate-spin' /> : <span>Кіру</span>}
 				</Button>
 				<div className="mt-4 text-sm text-center space-y-2">
-					<Link href="/auth/forgot-password" className="text-blue-600 hover:text-blue-500 hover:underline block">
+					{/* <Link href="/auth/forgot-password" className="text-blue-600 hover:text-blue-500 hover:underline block">
 						Құпиясөзді ұмыттыңыз ба?
-					</Link>
+					</Link> */}
 					<div>
 						Аккаунтыңыз жоқ па?{' '}
 						<Link href="/auth/sign-up" className="text-blue-600 hover:text-blue-500 hover:underline">

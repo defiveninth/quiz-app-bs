@@ -75,7 +75,7 @@ export default function AttemptPage() {
 		return (
 			<div className="flex justify-center items-center">
 				<Loader className="animate-spin" />
-				<span className="ml-2">Loading Quiz...</span>
+				<span className="ml-2">Сұрақтар жүктелуде...</span>
 			</div>
 		)
 	}
@@ -125,18 +125,18 @@ export default function AttemptPage() {
 							disabled={currentQuestionIndex === 0}
 							onClick={handlePreviousQuestion}
 						>
-							Previous
+							Артқа
 						</Button>
 						<Button
 							disabled={currentQuestionIndex === attemptData.quiz.questions.length - 1}
 							onClick={handleNextQuestion}
 						>
-							Next
+							Келесі
 						</Button>
 					</div>
 
 					<div className="flex justify-end mt-6">
-						<Button onClick={handleSubmitQuiz}>Submit Quiz</Button>
+						<Button onClick={handleSubmitQuiz}>Аяқтау</Button>
 					</div>
 				</Card>
 			</div>

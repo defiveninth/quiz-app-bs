@@ -80,7 +80,7 @@ export default function QuizPage() {
 							<div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-4">
 								{/* Total Questions */}
 								<div className="p-4 rounded-md bg-blue-100 dark:bg-blue-900">
-									<h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200">Total Questions</h3>
+									<h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200">Сұрақтар саны</h3>
 									<p className="text-2xl font-bold text-blue-900 dark:text-blue-50">
 										{attemptData.quiz.questions.length}
 									</p>
@@ -88,7 +88,7 @@ export default function QuizPage() {
 
 								{/* Total Score */}
 								<div className="p-4 rounded-md bg-green-100 dark:bg-green-900">
-									<h3 className="text-lg font-semibold text-green-800 dark:text-green-200">Your Score</h3>
+									<h3 className="text-lg font-semibold text-green-800 dark:text-green-200">Жинаған балл</h3>
 									<p className="text-2xl font-bold text-green-900 dark:text-green-50">
 										{attemptData.score !== null ? attemptData.score : 0}
 									</p>
@@ -96,7 +96,7 @@ export default function QuizPage() {
 
 								{/* Percentage */}
 								<div className="p-4 rounded-md bg-yellow-100 dark:bg-yellow-900">
-									<h3 className="text-lg font-semibold text-yellow-800 dark:text-yellow-200">Percentage</h3>
+									<h3 className="text-lg font-semibold text-yellow-800 dark:text-yellow-200">Пайыз</h3>
 									<p className="text-2xl font-bold text-yellow-900 dark:text-yellow-50">
 										{attemptData.score !== null
 											? ((attemptData.score / attemptData.quiz.questions.length) * 100).toFixed(2)

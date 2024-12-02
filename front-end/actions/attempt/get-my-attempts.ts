@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import urlCreator from '@/lib/url-creator'
+import { useRouter } from 'next/navigation'
 
 interface Quiz {
 	id: string
@@ -25,11 +26,11 @@ interface UseMyAttemptsReturn {
 	fetchAttemts: () => void
 }
 
-
 const useMyAttempts = (): UseMyAttemptsReturn => {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 	const [attempts, setAttempts] = useState<Attempt[]>([])
+	const router = useRouter()
 
 	const fetchAttemts = async () => {
 		setIsLoading(true)
@@ -39,6 +40,11 @@ const useMyAttempts = (): UseMyAttemptsReturn => {
 			method: 'GET',
 			headers: { 'Content-Type': 'application/json' },
 		})
+
+		if (tokenResponse.status === 401) {
+			router.push('/api/auth/sign-out')
+			return
+		}
 
 		if (!tokenResponse.ok) {
 			throw new Error('Failed to fetch access token')
