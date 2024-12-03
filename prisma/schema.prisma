@@ -57,6 +57,7 @@ model Lesson {
   id          String   @id @default(cuid())
   title       String
   description String?
+  ytVideoUrl  String?
   quizId      String   @unique
   quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
   active      Boolean  @default(true)

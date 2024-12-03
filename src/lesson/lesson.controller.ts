@@ -9,7 +9,6 @@ import {
   Get,
   Param,
   NotFoundException,
-  Res,
   UsePipes,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
@@ -27,8 +26,8 @@ export class LessonController {
   @Post('edit')
   @UsePipes(ValidationPipe)
   async editLesson(@Body() body: EditLessonDto) {
-    const { id, description, title } = body
-    return this.lessonService.edit(id, title, description)
+    const { id, description, title, ytVideoUrl } = body
+    return this.lessonService.edit(id, title, description, ytVideoUrl)
   }
 
   @Post('add-file')

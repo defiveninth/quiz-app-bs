@@ -9,4 +9,7 @@ export class EditLessonDto {
 
 	@IsString()
 	description: string
+
+	@IsString()
+	ytVideoUrl: string
 }

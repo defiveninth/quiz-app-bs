@@ -10,11 +10,10 @@ export class LessonService {
 		private readonly prisma: PrismaService,
 	) { }
 
-	// Method to update lesson details
-	async edit(id: string, title: string, description: string) {
+	async edit(id: string, title: string, description: string, ytVideoUrl: string) {
 		await this.prisma.lesson.update({
 			where: { id },
-			data: { title, description },
+			data: { title, description, ytVideoUrl },
 		})
 	}
 
